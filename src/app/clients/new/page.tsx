@@ -1,0 +1,546 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import {
+  User,
+  ArrowLeft,
+  ArrowRight,
+  Save,
+  CreditCard,
+  Briefcase,
+  CheckCircle2
+} from 'lucide-react';
+
+export default function NewClientPage() {
+  const router = useRouter();
+  const [step, setStep] = useState(1);
+  const [raiders, setRaiders] = useState<any[]>([]);
+  const [branches, setBranches] = useState<any[]>([]);
+  const [passportFile, setPassportFile] = useState<File | null>(null);
+  const [passportPreview, setPassportPreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+
+  // Form State
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email_address: '',
+    residential_address: '',
+    office: '',
+    branch_id: '',
+    id_details: '',
+    bank_name: '',
+    account_name: '',
+    account_number: '',
+    file_no: '',
+    date_of_purchase: '',
+    date_of_first_disbursement: '',
+    final_disbursement: '',
+    vehicle_type_chassis: '',
+    no_of_motorcycles: '',
+    chassis_no: '',
+    total_disbursed_amount: '',
+    utility_charges: '',
+    duration_of_completion: '',
+    username: '',
+    password: '',
+  });
+
+  useEffect(() => {
+    async function fetchRaiders() {
+      try {
+        const res = await fetch('/api/raiders');
+        if (res.ok) {
+          const data = await res.json();
+          setRaiders(data);
+        }
+      } catch (err) {
+        console.error('Error fetching raiders:', err);
+      }
+    }
+    async function fetchBranches() {
+      try {
+        const res = await fetch('/api/branches');
+        if (res.ok) {
+          const data = await res.json();
+          setBranches(data);
+        }
+      } catch (err) {
+        console.error('Error fetching branches:', err);
+      }
+    }
+    fetchRaiders();
+    fetchBranches();
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (formError) setFormError(null);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setPassportFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPassportPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleNext = () => {
+    setFormError(null);
+    if (step === 1) {
+      if (!formData.name || !formData.name.trim()) {
+        setFormError('Client Full Name is required.');
+        return;
+      }
+      if (!formData.phone || !formData.phone.trim()) {
+        setFormError('Client Phone Number is required.');
+        return;
+      }
+      if (!formData.username || !formData.username.trim()) {
+        setFormError('Portal Username is required.');
+        return;
+      }
+      if (!formData.password || !formData.password.trim()) {
+        setFormError('Portal Password is required.');
+        return;
+      }
+    }
+    if (step < 3) {
+      setStep(prev => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    setFormError(null);
+    setStep(prev => prev - 1);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFormError(null);
+
+    if (!formData.name || !formData.name.trim()) {
+      setFormError('Client Full Name is required');
+      return;
+    }
+
+    if (!formData.phone || !formData.phone.trim()) {
+      setFormError('Client Phone Number is required');
+      return;
+    }
+
+    if (step < 3) {
+      handleNext();
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const data = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        data.append(key, value);
+      });
+      if (passportFile) {
+        data.append('passport', passportFile);
+      }
+
+      const res = await fetch('/api/clients', {
+        method: 'POST',
+        body: data,
+      });
+
+      if (res.ok) {
+        // Signal the clients list and dashboard stats cache to refresh on next load.
+        sessionStorage.setItem('clients_cache_dirty', 'true');
+        sessionStorage.setItem('dashboard_stats_cache_dirty', 'true');
+        router.push('/clients');
+      } else {
+        const errData = await res.json();
+        setFormError(errData.message || 'Error creating client record');
+      }
+    } catch (err) {
+      console.error('Error creating client:', err);
+      setFormError('Failed to save client record. Please check your connection.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Steps definitions
+  const steps = [
+    { number: 1, name: 'Personal Profile', icon: User },
+    { number: 2, name: 'Financial details', icon: CreditCard },
+    { number: 3, name: 'Preview & Confirm', icon: CheckCircle2 },
+  ];
+
+  return (
+    <div className=" mx-auto space-y-6 py-6 animate-fadeIn">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/clients"
+            className="bg-slate-100 dark:bg-slate-800 p-2 rounded-xl text-slate-650 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Link>
+          <div>
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Log New Client Record</h2>
+          </div>
+        </div>
+        <span className="text-xs font-semibold px-3 py-1 bg-violet-500/10 border border-violet-500/20 text-violet-600 dark:text-violet-400 rounded-lg">
+          Step {step} of 3
+        </span>
+      </div>
+
+      {/* Stepper Progress Bar */}
+      <div className="bg-white dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm">
+        <div className="relative w-full px-8">
+          {/* Progress bar line */}
+          <div className="absolute top-1/2 left-12 right-12 h-0.5 bg-slate-200 dark:bg-slate-800 -translate-y-1/2 z-0" />
+          <div
+            className="absolute top-1/2 h-0.5 bg-violet-600 -translate-y-1/2 transition-all duration-300 z-0"
+            style={{
+              left: '52px',
+              right: step === 1
+                ? 'calc(100% - 52px)'
+                : step === 2
+                  ? 'calc(50% - 20px)'
+                  : '52px',
+            }}
+          />
+
+          <div className="relative flex justify-between w-full z-10">
+            {steps.map((s, idx) => {
+              const Icon = s.icon;
+              const isCompleted = step > s.number;
+              const isActive = step === s.number;
+
+              return (
+                <div key={s.number} className="relative z-10 flex flex-col items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={s.number > step}
+                    onClick={() => setStep(s.number)}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all duration-300 font-semibold text-sm ${isCompleted
+                      ? 'bg-violet-600 border-violet-600 text-white'
+                      : isActive
+                        ? 'bg-white dark:bg-slate-900 border-violet-600 text-violet-600 dark:text-white shadow-lg shadow-violet-500/10 scale-110'
+                        : 'bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-400'
+                      }`}
+                  >
+                    {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : s.number}
+                  </button>
+                  <span className={`text-xs font-semibold tracking-wide ${isActive ? 'text-violet-600 dark:text-violet-400 font-bold' : 'text-slate-400'}`}>
+                    {s.name}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Form Content */}
+      <div className="bg-white dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl p-6 shadow-sm">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {formError && (
+            <div className="bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 p-4 rounded-xl text-sm font-semibold flex items-center justify-between animate-fadeIn">
+              <span>{formError}</span>
+              <button
+                type="button"
+                onClick={() => setFormError(null)}
+                className="text-xs font-bold hover:underline ml-4 uppercase tracking-wider"
+              >
+                Dismiss
+              </button>
+            </div>
+          )}
+
+          {/* STEP 1: Personal Details */}
+          {step === 1 && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-sm font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider mb-4">1. Personal & Contact Info</h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Passport upload preview widget */}
+                  <div className="md:col-span-1 flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50 dark:bg-slate-950/40 text-center space-y-3">
+                    {passportPreview ? (
+                      <img
+                        src={passportPreview}
+                        alt="Passport Preview"
+                        className="w-28 h-28 rounded-2xl object-cover border border-violet-500/30 shadow-md"
+                      />
+                    ) : (
+                      <div className="w-28 h-28 rounded-2xl bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-400 border border-slate-200 dark:border-slate-800">
+                        <User className="w-10 h-10" />
+                      </div>
+                    )}
+                    <label className="cursor-pointer bg-violet-600 hover:bg-violet-500 text-white font-semibold text-xs px-3.5 py-2 rounded-xl transition-all shadow-md">
+                      Upload Passport
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+
+                  {/* Inputs */}
+                  <div className="md:col-span-2 space-y-4">
+                    <div className="flex flex-col gap-1.5">
+                      <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Full Name *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                        className="bg-slate-50 dark:bg-slate-955 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
+                        placeholder="e.g. John Doe"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Phone Number *</label>
+                        <input
+                          type="text"
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          required
+                          className="bg-slate-50 dark:bg-slate-955 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
+                          placeholder="e.g. +234..."
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Email Address</label>
+                        <input
+                          type="email"
+                          name="email_address"
+                          value={formData.email_address}
+                          onChange={handleInputChange}
+                          className="bg-slate-50 dark:bg-slate-955 border border-slate-305 border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
+                          placeholder="e.g. john@example.com"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Government ID Details</label>
+                  <input
+                    type="text"
+                    name="id_details"
+                    value={formData.id_details}
+                    onChange={handleInputChange}
+                    className="bg-slate-50 dark:bg-slate-955 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
+                    placeholder="NIN / Driver's License No"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Office / Branch</label>
+                  <select
+                    name="branch_id"
+                    value={formData.branch_id}
+                    onChange={handleInputChange}
+                    className="bg-slate-50 dark:bg-slate-955 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
+                  >
+                    <option value="">Select a branch</option>
+                    {branches.map((branch) => (
+                      <option key={branch.id} value={branch.id}>{branch.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Residential Address</label>
+                <textarea
+                  name="residential_address"
+                  value={formData.residential_address}
+                  onChange={handleInputChange}
+                  className="bg-slate-50 dark:bg-slate-955 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
+                  placeholder="Home Address details"
+                  rows={3}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Portal Username *</label>
+                  <input
+                    type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    required
+                    className="bg-slate-50 dark:bg-slate-955 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
+                    placeholder="Configure login username"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Portal Password *</label>
+                  <input
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    required
+                    className="bg-slate-50 dark:bg-slate-955 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
+                    placeholder="Configure login password"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 2: Financial Details */}
+          {step === 2 && (
+            <div className="space-y-6 animate-fadeIn">
+              <div>
+                <h3 className="text-sm font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider mb-4">2. Financials & Bank Details</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-bold text-slate-505 dark:text-slate-400 uppercase">Bank Name</label>
+                    <input
+                      type="text"
+                      name="bank_name"
+                      value={formData.bank_name}
+                      onChange={handleInputChange}
+                      className="bg-slate-50 dark:bg-slate-955 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
+                      placeholder="e.g. Zenith Bank"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-bold text-slate-505 dark:text-slate-400 uppercase">Account Name</label>
+                    <input
+                      type="text"
+                      name="account_name"
+                      value={formData.account_name}
+                      onChange={handleInputChange}
+                      className="bg-slate-50 dark:bg-slate-955 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
+                      placeholder="e.g. Account Name"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-xs font-bold text-slate-505 dark:text-slate-400 uppercase">Account Number</label>
+                    <input
+                      type="text"
+                      name="account_number"
+                      value={formData.account_number}
+                      onChange={handleInputChange}
+                      className="bg-slate-50 dark:bg-slate-955 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-violet-500/50 text-sm"
+                      placeholder="e.g. 1012345678"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* STEP 3: Preview & Confirmation */}
+          {step === 3 && (
+            <div className="space-y-6 animate-fadeIn">
+              <div>
+                <h3 className="text-sm font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider mb-2">3. Review & Confirm Details</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Please review all information carefully before deploying the client record to the system.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Profile Card */}
+                <div className="bg-slate-50 dark:bg-slate-955/40 border border-slate-200 dark:border-slate-850 p-4 rounded-xl space-y-3">
+                  <h4 className="text-xs font-bold text-violet-600 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-1 flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5" />
+                    <span>Personal Profile</span>
+                  </h4>
+                  <div className="flex gap-4 items-center">
+                    {passportPreview ? (
+                      <img src={passportPreview} alt="Preview" className="w-16 h-16 rounded-xl object-cover border border-violet-500/20 shadow-sm" />
+                    ) : (
+                      <div className="w-16 h-16 rounded-xl bg-slate-200 dark:bg-slate-800 flex items-center justify-center text-slate-500">
+                        <User className="w-6 h-6" />
+                      </div>
+                    )}
+                    <div className="text-xs space-y-1">
+                      <p><strong>Name:</strong> {formData.name}</p>
+                      <p><strong>Phone:</strong> {formData.phone || 'N/A'}</p>
+                      <p><strong>Email:</strong> {formData.email_address || 'N/A'}</p>
+                    </div>
+                  </div>
+                  <div className="text-xs space-y-1.5 pt-2 border-t border-slate-200 dark:border-slate-800">
+                    <p><strong>Government ID:</strong> {formData.id_details || 'N/A'}</p>
+                    <p><strong>Office / Branch:</strong> {branches.find(b => String(b.id) === String(formData.branch_id))?.name || 'N/A'}</p>
+                    <p><strong>Residential Address:</strong> {formData.residential_address || 'N/A'}</p>
+                  </div>
+                </div>
+
+                {/* Financial details Card */}
+                <div className="bg-slate-50 dark:bg-slate-955/40 border border-slate-200 dark:border-slate-850 p-4 rounded-xl space-y-3">
+                  <h4 className="text-xs font-bold text-violet-600 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 pb-1 flex items-center gap-1.5">
+                    <CreditCard className="w-3.5 h-3.5" />
+                    <span>Bank & Account Details</span>
+                  </h4>
+                  <div className="text-xs space-y-2">
+                    <p><strong>Bank Name:</strong> {formData.bank_name || 'N/A'}</p>
+                    <p><strong>Account Name:</strong> {formData.account_name || 'N/A'}</p>
+                    <p><strong>Account Number:</strong> {formData.account_number || 'N/A'}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Stepper Navigation Buttons */}
+          <div className="flex justify-between items-center border-t border-slate-200 dark:border-slate-800 pt-6 mt-4">
+            <button
+              type="button"
+              onClick={step === 1 ? () => router.push('/clients') : handlePrev}
+              className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-1.5"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>{step === 1 ? 'Cancel' : 'Previous Step'}</span>
+            </button>
+
+            {step < 3 ? (
+              <button
+                key="continue-btn"
+                type="button"
+                onClick={handleNext}
+                className="bg-violet-600 hover:bg-violet-500 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-1.5 shadow-md shadow-violet-500/10"
+              >
+                <span>Continue</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            ) : (
+              <button
+                key="submit-btn"
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-violet-600 hover:bg-violet-500 text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition-all flex items-center gap-2 shadow-md shadow-violet-500/10"
+              >
+                <Save className="w-4 h-4" />
+                <span>{isSubmitting ? 'Saving Record...' : 'Deploy Client Profile'}</span>
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
