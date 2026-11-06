@@ -802,7 +802,7 @@ export default function WelcomePage() {
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <h3 style={{ fontWeight: 800, color: 'var(--w-text-primary)', fontSize: 22, marginBottom: 28 }}>We're here to help</h3>
-              {[{ icon: <Phone size={18} />, label: 'Phone', val: '07066204483', sub: 'Mon–Fri, 8am to 5pm' }, { icon: <Mail size={18} />, label: 'Email', val: 'info@brahamsama.com', sub: 'We reply within 24 hours' }, { icon: <MapPin size={18} />, label: 'Address', val: 'Suite 3 Zavati Plaza Katuru Road Unguwan Sarki', sub: 'Head Office & Branch Offices' }].map((item, i) => (
+              {[{ icon: <Phone size={18} />, label: 'Phone', val: '07066204483', sub: 'Mon–Fri, 8am to 5pm' }, { icon: <Mail size={18} />, label: 'Email', val: 'info@brahamsama.com', sub: 'We reply within 24 hours' }, { icon: <MapPin size={18} />, label: 'Address', val: 'H3 Mashi Road Badarawa Kaduna', sub: 'Head Office & Branch Offices' }].map((item, i) => (
                 <div key={i} style={{ display: 'flex', gap: 14, background: 'var(--w-bg-card)', border: '1px solid var(--w-border)', borderRadius: 16, padding: 18, marginBottom: 14 }}>
                   <div style={{ padding: 10, background: 'var(--w-icon-bg)', color: '#f59e0b', borderRadius: 12, flexShrink: 0 }}>{item.icon}</div>
                   <div>
@@ -871,7 +871,7 @@ export default function WelcomePage() {
             </div>
           </div>
           <div style={{ fontSize: 12, color: '#94a3b8', textAlign: 'center' }}>
-            RC No. 7121543 · Suite 3 Zavati Plaza Katuru Road Unguwan Sarki · © {new Date().getFullYear()} Galkuz RentalHub Global Enterprise. All rights reserved.
+            RC No. 7121543 · H3 Mashi Road Badarawa Kaduna · © {new Date().getFullYear()} Galkuz RentalHub Global Enterprise. All rights reserved.
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
             {[Facebook, Twitter, Instagram, Linkedin].map((Icon, i) => (

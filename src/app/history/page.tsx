@@ -107,7 +107,7 @@ export default function HistoryPage() {
             </p>
             <div style={{ background: '#090d16', border: '1px solid #1e293b', padding: 20, borderRadius: 16, color: '#fbbf24', fontWeight: 700, lineHeight: 1.6 }}>
               <MapPin size={18} style={{ display: 'inline', marginRight: 8, verticalAlign: 'middle' }} />
-              Suite 3, Zavati Mall, Katuru Road, Unguwan Sarki, Opposite Silversand Hotel, Kaduna, Nigeria.
+              H3 Mashi Road Badarawa Kaduna, Nigeria.
             </div>
           </div>
 
