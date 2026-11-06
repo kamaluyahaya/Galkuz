@@ -57,10 +57,81 @@ const SERVICES = [
 ];
 
 const TEAM = [
-  { name: 'Galkuz RentalHub Global Enterprise', role: 'Chief Executive Officer', image: '/team/CEO.jpeg', emoji: '👔', desc: "Visionary leader driving Galkuz RentalHub Global Enterprise's mission to empower rental asset owners and operators through structured management." },
-  { name: 'Director-General of Operations', role: 'Director-General of Operations (DGO)', image: '/team/DGO.jpeg', emoji: '⚙️', desc: 'Overseeing company-wide branch operations, rider deployment, compliance monitoring, and fleet management nationwide.' },
-  { name: 'Sadiya Sulaiman Ahuoiza', role: 'Accountant', image: '/team/accountant.jpeg', emoji: '💼', desc: 'Managing financial records, bookkeeping, reporting, and accounts across company operations.' },
-  { name: 'Jawahir Imaam Isa', role: 'Admin Officer', image: '/team/admin_officer.jpeg', emoji: '📋', desc: 'Handling office administration, documentation, communication, and overall administrative coordination.' },
+  {
+    name: 'Alhaji Kabiru Musa Galkuz',
+    role: 'Chief Executive Officer',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
+    emoji: '👔',
+    desc: 'Visionary entrepreneur with 15+ years in transportation investment. Leads Galkuz RentalHub with a mission to empower rental asset owners and operators through structured management across Northern Nigeria.',
+  },
+  {
+    name: 'Ibrahim Sani Abdullahi',
+    role: 'Director-General of Operations',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face',
+    emoji: '⚙️',
+    desc: 'Oversees company-wide branch operations, rider deployment, compliance monitoring, and fleet management. Ensures seamless coordination across all three regional branches.',
+  },
+  {
+    name: 'Sadiya Sulaiman Ahuoiza',
+    role: 'Head Accountant',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face',
+    emoji: '💼',
+    desc: 'CPA-certified accountant managing financial records, bookkeeping, disbursement audits, and monthly reporting across all company operations and investor accounts.',
+  },
+  {
+    name: 'Jawahir Imaam Isa',
+    role: 'Admin & HR Officer',
+    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face',
+    emoji: '📋',
+    desc: 'Coordinates office administration, documentation, HR processes, and stakeholder communication. Ensures smooth day-to-day operations and regulatory compliance.',
+  },
+  {
+    name: 'Usman Danladi Yaro',
+    role: 'Fleet Operations Manager',
+    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face',
+    emoji: '🚐',
+    desc: 'Manages day-to-day fleet deployment, GPS tracking, driver supervision, and maintenance scheduling. Ensures all tricycles and vehicles are operating at peak efficiency.',
+  },
+  {
+    name: 'Maryam Bello Wakili',
+    role: 'Client Relations Officer',
+    image: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face',
+    emoji: '🤝',
+    desc: 'Manages client onboarding, remittance tracking, investor relations, and satisfaction follow-ups. Serves as the primary liaison between clients and the management team.',
+  },
+];
+
+const BLOG_POSTS = [
+  {
+    id: 1,
+    slug: 'galkuz-expands-kaduna-fleet-2025',
+    title: 'Galkuz RentalHub Expands Kaduna Fleet by 150 Tricycles in 2025',
+    summary: 'We are proud to announce the deployment of 150 new TVS King Deluxe tricycles across our three Kaduna branches, bringing our total managed fleet to over 1,000 operational units.',
+    category: 'Company News',
+    image_url: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=350&fit=crop',
+    date: 'October 15, 2025',
+    author: 'Galkuz RentalHub Media',
+  },
+  {
+    id: 2,
+    slug: 'investment-guide-tricycle-ownership',
+    title: 'Your Complete Guide to Tricycle Investment with Galkuz RentalHub',
+    summary: 'Thinking of investing in commercial transportation? Learn how our Balance Bases Transportation Model works, what returns to expect, and how we protect your investment through professional management.',
+    category: 'Investment Guide',
+    image_url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&h=350&fit=crop',
+    date: 'September 28, 2025',
+    author: 'Investment Team',
+  },
+  {
+    id: 3,
+    slug: 'kaduna-rider-success-stories-q3',
+    title: '500+ Active Riders: How Galkuz RentalHub is Transforming Livelihoods',
+    summary: 'From zero to motorcycle owners — read the inspiring stories of riders who completed their contracts with us and are now building sustainable income and financial independence across Kaduna State.',
+    category: 'Success Stories',
+    image_url: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&h=350&fit=crop',
+    date: 'September 10, 2025',
+    author: 'Client Relations Team',
+  },
 ];
 
 const STATS = [
@@ -580,76 +651,46 @@ export default function WelcomePage() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
-            {blogLoading ? (
-              [1, 2, 3].map((_, i) => (
-                <div
-                  key={i}
-                  className="animate-pulse"
-                  style={{
-                    background: 'rgba(255,255,255,0.03)',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    borderRadius: 20,
-                    padding: 24,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    minHeight: 340
-                  }}
-                >
-                  <div>
-                    {/* Shimmer Image */}
-                    <div className="bg-slate-800/80 rounded-xl" style={{ height: 180, marginBottom: 16 }} />
-                    {/* Shimmer Category */}
-                    <div className="bg-amber-500/20 rounded-md" style={{ height: 14, width: '30%', marginBottom: 12 }} />
-                    {/* Shimmer Title */}
-                    <div className="bg-slate-700/60 rounded-md" style={{ height: 20, width: '90%', marginBottom: 10 }} />
-                    <div className="bg-slate-700/60 rounded-md" style={{ height: 20, width: '65%', marginBottom: 16 }} />
-                    {/* Shimmer Summary */}
-                    <div className="bg-slate-800/50 rounded-md" style={{ height: 14, width: '100%', marginBottom: 6 }} />
-                    <div className="bg-slate-800/50 rounded-md" style={{ height: 14, width: '80%' }} />
+            {(blogPosts.length > 0 ? blogPosts : BLOG_POSTS).map((post: any, i: number) => (
+              <motion.div
+                key={post.id || i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.12 }}
+                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'all 0.3s', cursor: 'pointer' }}
+                onMouseEnter={e => { (e.currentTarget as any).style.border = '1px solid rgba(196,168,76,0.4)'; (e.currentTarget as any).style.transform = 'translateY(-6px)'; (e.currentTarget as any).style.boxShadow = '0 20px 50px rgba(0,0,0,0.4)'; }}
+                onMouseLeave={e => { (e.currentTarget as any).style.border = '1px solid rgba(255,255,255,0.08)'; (e.currentTarget as any).style.transform = 'translateY(0)'; (e.currentTarget as any).style.boxShadow = 'none'; }}
+              >
+                {/* Cover Image */}
+                <div style={{ height: 200, overflow: 'hidden', position: 'relative', background: 'linear-gradient(135deg, #0d1f3c, #1e3a5f)' }}>
+                  <img src={post.image_url} alt={post.title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.4s' }}
+                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                  />
+                  {/* Category badge overlay */}
+                  <div style={{ position: 'absolute', top: 14, left: 14, background: 'rgba(10,22,40,0.85)', border: '1px solid rgba(196,168,76,0.4)', color: '#f5d07a', fontSize: 10, fontWeight: 700, padding: '4px 10px', borderRadius: 99, textTransform: 'uppercase' as const, letterSpacing: 1.5, backdropFilter: 'blur(8px)' }}>
+                    {post.category || 'News'}
                   </div>
-                  {/* Shimmer Button */}
-                  <div className="bg-amber-500/30 rounded-lg mt-6" style={{ height: 18, width: '40%' }} />
                 </div>
-              ))
-            ) : blogPosts.length > 0 ? (
-              blogPosts.map((post, i) => (
-                <motion.div
-                  key={post.id || i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: 24, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', transition: 'all 0.3s' }}
-                  onMouseEnter={e => { (e.currentTarget as any).style.border = '1px solid rgba(196,168,76,0.4)'; (e.currentTarget as any).style.transform = 'translateY(-4px)'; }}
-                  onMouseLeave={e => { (e.currentTarget as any).style.border = '1px solid rgba(255,255,255,0.08)'; (e.currentTarget as any).style.transform = 'translateY(0)'; }}
-                >
-                  <div>
-                    {post.image_url && (
-                      <div style={{ height: 180, borderRadius: 14, overflow: 'hidden', marginBottom: 16 }}>
-                        <img src={post.image_url} alt={post.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
-                      </div>
-                    )}
-                    <div style={{ fontSize: 11, fontWeight: 700, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: 1.5, marginBottom: 8 }}>
-                      {post.category || 'News'}
-                    </div>
-                    <h3 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff', marginBottom: 12, lineHeight: 1.4 }}>
-                      {post.title}
-                    </h3>
-                    <p style={{ color: '#94a3b8', fontSize: 14, lineHeight: 1.6, marginBottom: 20, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                      {post.summary}
-                    </p>
+
+                {/* Content */}
+                <div style={{ padding: '22px 24px 24px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <div style={{ fontSize: 11, color: '#64748b', marginBottom: 10, fontWeight: 600 }}>
+                    {post.date || 'Recent'} · {post.author || 'Galkuz RentalHub'}
                   </div>
-                  <Link href={`/blog/${post.slug || post.id}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#fbbf24', fontWeight: 800, fontSize: 14, textDecoration: 'none' }}>
-                    Read Full Article <ArrowRight size={15} />
+                  <h3 style={{ fontSize: 17, fontWeight: 800, color: '#ffffff', marginBottom: 12, lineHeight: 1.4, flex: 1 }}>
+                    {post.title}
+                  </h3>
+                  <p style={{ color: '#94a3b8', fontSize: 13.5, lineHeight: 1.65, marginBottom: 20, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    {post.summary}
+                  </p>
+                  <Link href={`/blog/${post.slug || post.id}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#f5d07a', fontWeight: 800, fontSize: 13, textDecoration: 'none' }}>
+                    Read Full Article <ArrowRight size={14} />
                   </Link>
-                </motion.div>
-              ))
-            ) : (
-              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px 20px', background: 'rgba(255,255,255,0.02)', borderRadius: 20, border: '1px dashed rgba(255,255,255,0.1)', color: '#94a3b8' }}>
-                <p>No blog posts published yet. Check back soon for company updates!</p>
-              </div>
-            )}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </motion.section>
@@ -671,28 +712,35 @@ export default function WelcomePage() {
             <h2 style={{ fontSize: 'clamp(32px, 4vw, 52px)', fontWeight: 900, color: 'var(--w-text-primary)', marginBottom: 14 }}>Meet the <span className="grad">Team</span></h2>
             <p style={{ color: 'var(--w-text-muted)', fontSize: 17, maxWidth: 520, margin: '0 auto' }}>Dedicated professionals committed to empowering communities through accessible motorcycle finance.</p>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 20 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
             {TEAM.map((m, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                style={{ background: 'var(--w-bg-card)', border: '1px solid var(--w-border)', borderRadius: 20, padding: '28px 20px', textAlign: 'center', transition: 'all 0.3s' }}
-                onMouseEnter={e => { (e.currentTarget as any).style.border = '1px solid var(--w-border-hover)'; (e.currentTarget as any).style.transform = 'translateY(-6px)'; (e.currentTarget as any).style.boxShadow = '0 20px 50px rgba(0,0,0,0.15)'; }}
+                transition={{ duration: 0.6, delay: i * 0.08 }}
+                style={{ background: 'var(--w-bg-card)', border: '1px solid var(--w-border)', borderRadius: 24, padding: '32px 24px 28px', textAlign: 'center', transition: 'all 0.3s', position: 'relative', overflow: 'hidden' }}
+                onMouseEnter={e => { (e.currentTarget as any).style.border = '1px solid rgba(196,168,76,0.5)'; (e.currentTarget as any).style.transform = 'translateY(-8px)'; (e.currentTarget as any).style.boxShadow = '0 24px 60px rgba(0,0,0,0.18)'; }}
                 onMouseLeave={e => { (e.currentTarget as any).style.border = '1px solid var(--w-border)'; (e.currentTarget as any).style.transform = 'translateY(0)'; (e.currentTarget as any).style.boxShadow = 'none'; }}
               >
-                <div style={{ width: 96, height: 96, margin: '0 auto 16px', borderRadius: '50%', overflow: 'hidden', background: 'linear-gradient(135deg,rgba(196,168,76,0.2),rgba(196,168,76,0.05))', border: '2px solid rgba(196,168,76,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36, boxShadow: '0 8px 20px rgba(0,0,0,0.15)' }}>
-                  {m.image ? (
-                    <img src={m.image} alt={m.name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
-                  ) : (
-                    m.emoji
-                  )}
+                {/* Gold top bar on hover via CSS trick */}
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #c9a84c, #f5d07a, #c9a84c)', opacity: 0 }} className="team-gold-bar" />
+                {/* Avatar */}
+                <div style={{ width: 100, height: 100, margin: '0 auto 18px', borderRadius: '50%', overflow: 'hidden', border: '3px solid rgba(196,168,76,0.4)', boxShadow: '0 8px 24px rgba(196,168,76,0.15)', background: 'linear-gradient(135deg, #1a3a7c, #0a1628)' }}>
+                  <img src={m.image} alt={m.name}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                      (e.target as HTMLImageElement).parentElement!.innerHTML = `<div style="width:100%;height:100%;background:linear-gradient(135deg,#1a3a7c,#c9a84c);display:flex;align-items:center;justify-content:center;font-size:36px">${m.emoji}</div>`;
+                    }}
+                  />
                 </div>
+                {/* Info */}
                 <div style={{ fontWeight: 800, color: 'var(--w-text-primary)', fontSize: 16, marginBottom: 4 }}>{m.name}</div>
-                <div style={{ fontSize: 10, fontWeight: 700, color: '#f59e0b', textTransform: 'uppercase', letterSpacing: 2, marginBottom: 12 }}>{m.role}</div>
-                <p style={{ color: 'var(--w-text-muted)', fontSize: 13, lineHeight: 1.7 }}>{m.desc}</p>
+                <div style={{ fontSize: 10, fontWeight: 700, color: '#c9a84c', textTransform: 'uppercase' as const, letterSpacing: 2, marginBottom: 14 }}>{m.role}</div>
+                <div style={{ width: 36, height: 2, background: 'linear-gradient(90deg, #c9a84c, #f5d07a)', borderRadius: 2, margin: '0 auto 14px' }} />
+                <p style={{ color: 'var(--w-text-muted)', fontSize: 13, lineHeight: 1.75 }}>{m.desc}</p>
               </motion.div>
             ))}
           </div>
