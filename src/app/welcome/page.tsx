@@ -58,46 +58,12 @@ const SERVICES = [
 
 const TEAM = [
   {
-    name: 'Alhaji Kabiru Musa Galkuz',
+    name: 'MOHAMMED MURTALA ADAMU',
     role: 'Chief Executive Officer',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
+    phone: '09078444449',
+    image: '/team/ceo.png',
     emoji: '👔',
-    desc: 'Visionary entrepreneur with 15+ years in transportation investment. Leads Galkuz RentalHub with a mission to empower rental asset owners and operators through structured management across Northern Nigeria.',
-  },
-  {
-    name: 'Ibrahim Sani Abdullahi',
-    role: 'Director-General of Operations',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face',
-    emoji: '⚙️',
-    desc: 'Oversees company-wide branch operations, rider deployment, compliance monitoring, and fleet management. Ensures seamless coordination across all three regional branches.',
-  },
-  {
-    name: 'Sadiya Sulaiman Ahuoiza',
-    role: 'Head Accountant',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face',
-    emoji: '💼',
-    desc: 'CPA-certified accountant managing financial records, bookkeeping, disbursement audits, and monthly reporting across all company operations and investor accounts.',
-  },
-  {
-    name: 'Jawahir Imaam Isa',
-    role: 'Admin & HR Officer',
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face',
-    emoji: '📋',
-    desc: 'Coordinates office administration, documentation, HR processes, and stakeholder communication. Ensures smooth day-to-day operations and regulatory compliance.',
-  },
-  {
-    name: 'Usman Danladi Yaro',
-    role: 'Fleet Operations Manager',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face',
-    emoji: '🚐',
-    desc: 'Manages day-to-day fleet deployment, GPS tracking, driver supervision, and maintenance scheduling. Ensures all tricycles and vehicles are operating at peak efficiency.',
-  },
-  {
-    name: 'Maryam Bello Wakili',
-    role: 'Client Relations Officer',
-    image: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face',
-    emoji: '🤝',
-    desc: 'Manages client onboarding, remittance tracking, investor relations, and satisfaction follow-ups. Serves as the primary liaison between clients and the management team.',
+    desc: 'Chief Executive Officer of Galkuz RentalHub Global Enterprise, leading the company’s mission to empower rental asset owners and operators through structured management and professional service delivery.',
   },
 ];
 
@@ -738,7 +704,8 @@ export default function WelcomePage() {
                 </div>
                 {/* Info */}
                 <div style={{ fontWeight: 800, color: 'var(--w-text-primary)', fontSize: 16, marginBottom: 4 }}>{m.name}</div>
-                <div style={{ fontSize: 10, fontWeight: 700, color: '#c9a84c', textTransform: 'uppercase' as const, letterSpacing: 2, marginBottom: 14 }}>{m.role}</div>
+                <div style={{ fontSize: 10, fontWeight: 700, color: '#c9a84c', textTransform: 'uppercase' as const, letterSpacing: 2, marginBottom: m.phone ? 6 : 14 }}>{m.role}</div>
+                {m.phone && <a href={`tel:${m.phone}`} style={{ display: 'block', fontSize: 13, fontWeight: 700, color: 'var(--w-text-muted)', textDecoration: 'none', marginBottom: 14 }}>{m.phone}</a>}
                 <div style={{ width: 36, height: 2, background: 'linear-gradient(90deg, #c9a84c, #f5d07a)', borderRadius: 2, margin: '0 auto 14px' }} />
                 <p style={{ color: 'var(--w-text-muted)', fontSize: 13, lineHeight: 1.75 }}>{m.desc}</p>
               </motion.div>
