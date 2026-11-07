@@ -307,7 +307,7 @@ export default function WelcomePage() {
         {/* Gold arc bottom */}
         <div style={{ position: 'absolute', bottom: -2, left: 0, right: 0, height: 6, background: 'linear-gradient(90deg, transparent 0%, #c9a84c 30%, #f5d07a 50%, #c9a84c 70%, transparent 100%)', opacity: 0.6 }} />
 
-        <div style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '80px 40px 100px', width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }}>
+        <div className="hero-grid" style={{ position: 'relative', zIndex: 10, maxWidth: 1280, margin: '0 auto', padding: '80px 40px 100px', width: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, alignItems: 'center' }}>
 
           {/* LEFT: Text content */}
           <motion.div
@@ -361,6 +361,7 @@ export default function WelcomePage() {
 
           {/* RIGHT: Image hero card */}
           <motion.div
+            className="hero-img-wrap"
             initial={{ opacity: 0, x: 40, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
@@ -371,6 +372,7 @@ export default function WelcomePage() {
               <img
                 src="/background.png"
                 alt="Galkuz RentalHub Fleet"
+                className="hero-img"
                 style={{ width: '100%', height: 420, objectFit: 'cover', objectPosition: 'center', display: 'block' }}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
@@ -408,8 +410,14 @@ export default function WelcomePage() {
         {/* Mobile stacked layout override via CSS */}
         <style>{`
           @media (max-width: 768px) {
-            .hero-grid { grid-template-columns: 1fr !important; padding: 60px 20px 80px !important; gap: 40px !important; }
+            .hero-grid { grid-template-columns: 1fr !important; padding: 100px 20px 60px !important; gap: 28px !important; }
             .hero-img-wrap { order: -1; }
+            .hero-img { height: 260px !important; }
+            .hero-section { min-height: auto !important; }
+          }
+          @media (max-width: 480px) {
+            .hero-grid { padding: 90px 16px 48px !important; }
+            .hero-img { height: 210px !important; }
           }
         `}</style>
 
