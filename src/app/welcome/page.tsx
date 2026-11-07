@@ -693,7 +693,7 @@ export default function WelcomePage() {
                 {/* Gold top bar on hover via CSS trick */}
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: 'linear-gradient(90deg, #c9a84c, #f5d07a, #c9a84c)', opacity: 0 }} className="team-gold-bar" />
                 {/* Avatar */}
-                <div style={{ width: 100, height: 100, margin: '0 auto 18px', borderRadius: '50%', overflow: 'hidden', border: '3px solid rgba(196,168,76,0.4)', boxShadow: '0 8px 24px rgba(196,168,76,0.15)', background: 'linear-gradient(135deg, #1a3a7c, #0a1628)' }}>
+                <div style={{ width: 160, height: 200, margin: '0 auto 18px', borderRadius: 16, overflow: 'hidden', border: '3px solid rgba(196,168,76,0.4)', boxShadow: '0 8px 24px rgba(196,168,76,0.15)', background: 'linear-gradient(135deg, #1a3a7c, #0a1628)' }}>
                   <img src={m.image} alt={m.name}
                     style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
                     onError={(e) => {
